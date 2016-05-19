@@ -1,0 +1,30 @@
+<link rel="import" href="contact-item.html">
+<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+<dom-module id="contact-list">
+
+    <template>
+        <template is="dom-repeat" id="contact" items="{{conactItems}}">
+            <contact-item firstname="{{item.firstname}}" lastname="{{item.lastname}}"
+                          phone="{{item.phone}}"></contact-item>
+        </template>
+    </template>
+
+    <script>
+        Polymer({
+            is: "contact-list",
+            ready: function () {
+
+                this.conactItems = [];
+                var self = this;
+                var myDataRef = new Firebase('https://luminous-torch-2252.firebaseIO.com/Users');
+                myDataRef.on("value", function (snapshot) {
+                    console.log(snapshot.val());
+                    self.conactItems = snapshot.val();
+                }, function (errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+            }
+        });
+    </script>
+
+</dom-module>
